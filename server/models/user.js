@@ -45,7 +45,7 @@ UserSchema.methods.generateAuthToken = function () {
   const access = 'auth';
   const token = jwt.sign({
     _id: user._id.toHexString(), access },
-  'YMt.?[c^YGE6M`~F49#JUD5%4').toString();
+  'secretSalt123').toString();
 
   user.tokens = user.tokens.concat([{ access, token }]);
 
@@ -59,7 +59,7 @@ UserSchema.statics.findByToken = function (token) {
   let decoded;
 
   try {
-    decoded = jwt.verify(token, 'YMt.?[c^YGE6M`~F49#JUD5%4')
+    decoded = jwt.verify(token, 'secretSalt123')
   } catch (e) {
     return Promise.reject();
   }
@@ -78,10 +78,9 @@ UserSchema.pre('save', function (next) {
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(user.password, salt, (err, hash) => {
         user.password = hash;
+        next();
       });
     });
-
-    next();
   } else {
     next();
   }
