@@ -24,7 +24,7 @@ const users = [{
   tokens: [{
     access: 'auth',
     token: jwt.sign(
-      { _id: userOneId, access: 'auth' },
+      { _id: userTwoId, access: 'auth' },
       'secretSalt123').toString()
   }]
 }];
